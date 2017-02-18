@@ -1,7 +1,6 @@
 import s_data
 from prints import print_data, print_cols_tables
 from requests import get_the_page
-from response import site_alive
 
 
 def search_in_columns(site, table, based, database):
