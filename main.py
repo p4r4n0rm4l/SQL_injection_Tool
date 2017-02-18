@@ -38,11 +38,12 @@ class inject_database:
 
         self.working_on_db = dbs.working_db(self.site)
         print "You are on: %s database" % self.working_on_db
-        self.site = replaces.repl(self.site, 2, self.working_on_db)
 
         change_database = raw_input("Do you want to change database? (y/n): ")
         if change_database == "y":
             self.change_database()
+        else:
+            self.site = replaces.repl(self.site, 2, self.working_on_db)
 
     def find_tables_of_database(self):
         self.the_page = get_the_page(self.site, "2")
@@ -70,7 +71,8 @@ class inject_database:
         self.sensitive_data = search_in_columns(
             self.site, self.table_choose, self.based, self.working_on_db)
 
-    # Afth thn function na thn dw argotera
+    # Prepei na to kanw etsi wste an metepeita 8elei na alla3ei o xrhsths database
+    # na mporei na to kanei apo edw giati twra den ginete
     def change_database(self):
         print_cols_tables(self.db_names, 'Databases')
         self.working_on_db = raw_input(
