@@ -1,8 +1,8 @@
 import s_data
 import dbs
 import replaces
-from prints import print_data, print_cols_tables, intro
-from requests import get_the_page
+from prints import *
+from requests import *
 from find_total_cols import ft_cols, uni_cols
 from vulnerable import vuln, f_vuln_col
 from response import site_alive

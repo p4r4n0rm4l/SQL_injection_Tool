@@ -1,4 +1,5 @@
 from texttable import Texttable
+from pip._vendor.distlib.compat import which
 
 
 def intro():
@@ -31,27 +32,29 @@ def print_data(total_data, columns, table_name):
 
 
 def print_cols_tables(data, which):
-    maxs = len(which)
+
+    len_of_which = len(which)
+    maxs = len_of_which
 
     for index in data:
-        current_len = len(index)
-        if maxs < current_len:
-            maxs = current_len
+        len_of_data = len(index)
+        if maxs < len_of_data:
+            maxs = len_of_data
 
     print '_' * (maxs + 2)
 
-    if len(which) % 2:
-        left = ((maxs - 2) / 2 - len(which) / 2 + 1)
-        right = maxs - ((maxs - 2) / 2 + len(which) / 2 + 2)
+    if len_of_which % 2:
+        left = ((maxs - 2) / 2 - len_of_which / 2 + 1)
+        right = maxs - ((maxs - 2) / 2 + len_of_which / 2 + 2)
 
     else:
-        left = ((maxs - 2) / 2 - len(which) / 2)
-        right = maxs - ((maxs - 2) / 2 + len(which) / 2)
+        left = ((maxs - 2) / 2 - len_of_which / 2)
+        right = maxs - ((maxs - 2) / 2 + len_of_which / 2)
 
     print '|' + ' ' * left + which + ' ' * right + '|'
     print '-' * (maxs + 2)
 
-    for i in range(0, len(data)):
-        print '|' + data[i] + ' ' * (maxs - len(data[i])) + '|'
+    for index in data:
+        print '|' + index + ' ' * (maxs - len(index)) + '|'
 
     print '-' * (maxs + 2)
