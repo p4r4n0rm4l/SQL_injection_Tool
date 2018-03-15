@@ -1,16 +1,7 @@
-import urllib2
-import re
-import httplib
-def get_the_page(site,opt):
-    req = urllib2.Request(site)
-    try:
-        response = urllib2.urlopen(req)
-    except:
-        print "Invalid url"
-        print "Program will exit"
-        exit()
-    else:
-        the_page=response.read()
-##        if opt=='2':
-##            the_page=re.sub("<.*?>","",the_page)
-        return (the_page)
+from urllib.request import urlopen
+
+
+def get_the_page(site, opt):
+    with urlopen(site) as f:
+        the_page = f.read().decode('utf-8')
+        return the_page

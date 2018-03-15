@@ -1,19 +1,20 @@
-## import urllib2
-import urllib
+import urllib.request
+import urllib.parse
+import urllib.error
+
+
 def site_alive(site):
     
     if "http://" not in site:
-        site="http://"+site
+        site = "http://"+site
     if "127.0.0.1" not in site:
         if "www." not in site:
-            site = site.replace("http://","http://www.")
-        ## req = urllib2.Request(site)
+            site = site.replace("http://", "http://www.")
         
         try:
-            ## response = urllib2.urlopen(req)
-            urllib.urlopen(site).getcode()
+            urllib.request.urlopen(site).getcode()
         except:
-            print "No response from server"
-            print "Program will exit"
+            print("No response from server")
+            print("Program will exit")
             exit()
-    return (site)
+    return site
