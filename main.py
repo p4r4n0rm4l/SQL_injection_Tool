@@ -132,6 +132,7 @@ if __name__ == '__main__':
             find_data.find_tables_of_database()
             find_data.select_table()
             find_data.search_data_from_columns()
+            
     #  elif option == "2":
         #  prepei na vrw swsto onoma gia to arxeio.
         #  options.what_to_do("1")
