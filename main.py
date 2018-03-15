@@ -117,7 +117,7 @@ if __name__ == '__main__':
         flag = 1
 
         while flag:
-            site = "http://127.0.0.1:81/sql.php?id=1'"
+            site = "http://www.xxx.xxx/sql.php?id=1'" # Vazeis edw to url tou site pou einai eupa8es
 
             if "'" in site:
                 site = site_alive(site)
