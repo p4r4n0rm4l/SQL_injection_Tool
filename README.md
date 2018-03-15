@@ -2,7 +2,7 @@
 SQL injection Tool written on python
 
 
-Script is written on python 2.7.x
+Script is written on python 3.6
 
 In case to use it you will need:
 
