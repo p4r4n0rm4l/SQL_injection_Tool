@@ -3,3 +3,4 @@
 *.pydevproject
 back_up*
 new_*
+.idea/
