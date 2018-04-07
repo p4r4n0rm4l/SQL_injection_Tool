@@ -2,6 +2,7 @@ import s_data
 import dbs
 import replaces
 import binascii
+import sys
 from prints import *
 from requests import *
 from find_total_cols import ft_cols, uni_cols
@@ -13,6 +14,7 @@ from search_in_columns import search_in_columns
 class InjectDatabase:
 
     def __init__(self, site, vuln_param):
+        # the first param, $ python main.py site.com
         self.site = site
         self.back_up_site = site
         self.vuln_param = vuln_param
@@ -117,12 +119,24 @@ if __name__ == '__main__':
         flag = 1
 
         while flag:
-            site = "http://www.xxx.xxx/sql.php?id=1'" # Vazeis edw to url tou site pou einai eupa8es
+            # the first param given from terminal, $ python main.py site.com
+            try:
+                site = sys.argv[1]
+            except IndexError:
+                print('Enter a url to test:')
+                site = input(">>> ")
+
+            # Vazeis edw to url tou site pou einai eupa8es
+            # site = "http://www.xxx.xxx/sql.php?id=1'"
 
             if "'" in site:
                 site = site_alive(site)
                 vuln_param = vuln(site)
                 flag = 0
+            else:
+                print("Site doesn't look vulnerable")
+                print("Enter url with ' :")
+                site = input(">>> ")
 
         if not flag:
             find_data = InjectDatabase(site, vuln_param)
